@@ -23,7 +23,7 @@ sudo apt install -y network-manager systemd-resolved
 sudo cat /etc/network/interfaces | head -8 > ./interfaces # prepare interfaces file without wifi config
 cat ./interfaces | sudo tee /etc/network/interfaces
 rm ./interfaces # remove interfaces file
-sudo systemctl restart networking
+sudo systemctl restart networking wpa_supplicant
 sudo systemctl restart NetworkManager systemd-resolved
 sudo nmcli radio wifi off
 sudo nmcli radio wifi on
