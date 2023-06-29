@@ -27,6 +27,7 @@ sudo systemctl restart networking wpa_supplicant
 sudo systemctl restart NetworkManager systemd-resolved
 sudo nmcli radio wifi off
 sudo nmcli radio wifi on
+sleep 10 # wait for wifi to be ready
 
 # connect it to the previously recorded wifi network
 sudo nmcli device wifi connect "$SSID" password "$PSK"
