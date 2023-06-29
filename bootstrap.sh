@@ -38,6 +38,7 @@ sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
 # use the new config files
 sudo update-grub
 sudo systemctl restart systemd-logind
+sudo systemctl restart NetworkManager
 
 # </ROOT>
 
