@@ -47,7 +47,20 @@ sudo systemctl restart NetworkManager
 # <USER>
 
 sudo apt install -y \
-    fish vim
+    fish rclone rsync vim
+
+# install config files
+mkdir -p ~/.config
+ln -s -f $PWD/config/* ~/.config/
+
+# deal with rclone config edge case
+unlink ~/.config/rclone # undo symlink b/c it eventually contains keys we don't want to commit...
+mkdir ~/.config/rclone  #  ...so we'll only copy the config files
+cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
+# rclone is not authorized yet, so authorize manually in recovery.sh
+
+# other config
+crontab crontab.bak
 
 # </USER>
 
