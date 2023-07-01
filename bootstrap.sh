@@ -47,7 +47,11 @@ sudo systemctl restart NetworkManager
 # <USER>
 
 sudo apt install -y \
-    fish rclone rsync vim
+    build-essential curl fish mosquitto rclone rsync vim
+
+wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
+bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
+rm ./update-nodejs-and-nodered
 
 # install config files
 mkdir -p ~/.config
