@@ -1,1 +1,2 @@
 * 1 * * * bash /home/kenny/Services/run_rclone_sync.sh
+* * * * MON-FRI cd ~/Services/sec-edgar/ && bash ./scan.sh
