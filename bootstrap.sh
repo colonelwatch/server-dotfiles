@@ -53,6 +53,11 @@ wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/upda
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
 rm ./update-nodejs-and-nodered
 
+# download and execute miniconda install script
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3_install.sh
+bash ~/miniconda3_install.sh -b # conda will soon be intialized by importing the fish config
+rm ~/miniconda3_install.sh
+
 # install config files
 mkdir -p ~/.config
 ln -s -f $PWD/config/* ~/.config/
