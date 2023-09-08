@@ -47,16 +47,29 @@ sudo systemctl restart NetworkManager
 # <USER>
 
 sudo apt install -y \
-    build-essential curl fish htop mosquitto rclone rsync vim
+    build-essential curl fish htop mosquitto pkg-config rclone ronn rsync vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
 rm ./update-nodejs-and-nodered
 
+# download and execute rust install script
+wget https://sh.rustup.rs -O ~/rustup-init.sh
+bash ~/rustup-init.sh -y
+rm ~/rustup-init.sh
+export PATH="$HOME/.cargo/bin:$PATH" # TODO: add cargo to path in fish config
+
 # download and execute miniconda install script
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3_install.sh
 bash ~/miniconda3_install.sh -b # conda will soon be intialized by importing the fish config
 rm ~/miniconda3_install.sh
+
+# compile and install zram-generator
+git clone https://github.com/systemd/zram-generator ~/zram-generator
+cd ~/zram-generator && make build && sudo make install NOBUILD=true && cd -
+rm -rf ~/zram-generator
+sudo systemctl daemon-reload
+sudo systemctl start /dev/zram0 # TODO: drop the swap partition that comes with Debian
 
 # install config files
 mkdir -p ~/.config
