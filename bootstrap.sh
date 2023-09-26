@@ -59,6 +59,12 @@ bash ~/rustup-init.sh -y
 rm ~/rustup-init.sh
 export PATH="$HOME/.cargo/bin:$PATH" # TODO: add cargo to path in fish config
 
+# download and move go binary
+wget https://go.dev/dl/go1.20.8.linux-amd64.tar.gz -O go.tar.gz
+sudo tar -C /usr/local -xzf go.tar.gz
+export PATH="$PATH:/usr/local/go/bin" # TODO: add go to path in fish config
+rm ~/go.tar.gz
+
 # download and execute miniconda install script
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3_install.sh
 bash ~/miniconda3_install.sh -b # conda will soon be intialized by importing the fish config
@@ -70,6 +76,10 @@ cd ~/zram-generator && make build && sudo make install NOBUILD=true && cd -
 rm -rf ~/zram-generator
 sudo systemctl daemon-reload
 sudo systemctl start /dev/zram0 # TODO: drop the swap partition that comes with Debian
+
+# compile and install cloudflared
+git clone https://github.com/cloudflare/cloudflared.git
+cd cloudflared && make cloudflared && go install github.com/cloudflare/cloudflared/cmd/cloudflared && cd -
 
 # install config files
 mkdir -p ~/.config

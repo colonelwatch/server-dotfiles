@@ -16,3 +16,8 @@ conda env create -f ~/Services/sec-edgar/environment.yml
 # nodered config was contained in the rclone backup
 sudo systemctl enable nodered
 sudo systemctl start nodered
+
+# cloudfared secrets were contained in the rclone backup
+sudo ~/cloudflared/cloudflared service install
+sudo systemctl enable cloudflared
+sudo systemctl start cloudflared
