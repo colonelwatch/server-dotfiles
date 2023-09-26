@@ -47,7 +47,7 @@ sudo systemctl restart NetworkManager
 # <USER>
 
 sudo apt install -y \
-    build-essential curl fish htop mosquitto pkg-config rclone ronn rsync vim
+    build-essential curl fish htop mosquitto nginx pkg-config rclone ronn rsync vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
@@ -90,6 +90,15 @@ unlink ~/.config/rclone # undo symlink b/c it eventually contains keys we don't 
 mkdir ~/.config/rclone  #  ...so we'll only copy the config files
 cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
 # rclone is not authorized yet, so authorize manually in recovery.sh
+
+# deal with nginx edge case
+sudo chmod +x /home
+sudo chmod +x /home/kenny
+sudo chmod +x /home/kenny/www
+sudo chmod +x /home/kenny/www/revrss
+sudo unlink /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/sites-available/revrss /etc/nginx/sites-enabled/revrss
+sudo systemctl restart nginx
 
 # other config
 crontab crontab.bak
