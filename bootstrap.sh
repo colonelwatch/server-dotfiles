@@ -6,6 +6,12 @@ if [ ! "$PWD" = "$HOME/.dotfiles" ]; then
     exit 1
 fi
 
+sudo mkdir -p --mode=0755 /usr/share/keyrings
+
+# add cloudflared repo
+curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
+echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+
 sudo apt update && sudo apt upgrade -y
 
 # </SETUP>
@@ -47,7 +53,7 @@ sudo systemctl restart NetworkManager
 # <USER>
 
 sudo apt install -y \
-    build-essential curl fish htop mosquitto nginx pkg-config rclone ronn rsync vim
+    build-essential cloudflared curl fish htop mosquitto nginx pkg-config rclone ronn rsync vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
@@ -58,12 +64,6 @@ wget https://sh.rustup.rs -O ~/rustup-init.sh
 bash ~/rustup-init.sh -y
 rm ~/rustup-init.sh
 export PATH="$HOME/.cargo/bin:$PATH" # TODO: add cargo to path in fish config
-
-# download and move go binary
-wget https://go.dev/dl/go1.20.8.linux-amd64.tar.gz -O go.tar.gz
-sudo tar -C /usr/local -xzf go.tar.gz
-export PATH="$PATH:/usr/local/go/bin" # TODO: add go to path in fish config
-rm ~/go.tar.gz
 
 # download and execute miniconda install script
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3_install.sh
@@ -76,10 +76,6 @@ cd ~/zram-generator && make build && sudo make install NOBUILD=true && cd -
 rm -rf ~/zram-generator
 sudo systemctl daemon-reload
 sudo systemctl start /dev/zram0 # TODO: drop the swap partition that comes with Debian
-
-# compile and install cloudflared
-git clone https://github.com/cloudflare/cloudflared.git
-cd cloudflared && make cloudflared && go install github.com/cloudflare/cloudflared/cmd/cloudflared && cd -
 
 # install config files
 mkdir -p ~/.config
