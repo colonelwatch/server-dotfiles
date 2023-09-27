@@ -12,6 +12,11 @@ sudo mkdir -p --mode=0755 /usr/share/keyrings
 curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
 echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
 
+# add zram-generator repo
+sudo wget https://nabijaczleweli.xyz/pgp.txt -O /etc/apt/keyrings/nabijaczleweli.asc
+echo 'deb [signed-by=/etc/apt/keyrings/nabijaczleweli.asc] https://debian.nabijaczleweli.xyz bookworm main' | sudo tee -a /etc/apt/sources.list.d/zram-generator.list
+echo 'deb-src [signed-by=/etc/apt/keyrings/nabijaczleweli.asc] https://debian.nabijaczleweli.xyz bookworm main' | sudo tee -a /etc/apt/sources.list.d/zram-generator.list
+
 sudo apt update && sudo apt upgrade -y
 
 # </SETUP>
@@ -38,6 +43,9 @@ sleep 10 # wait for wifi to be ready
 # connect it to the previously recorded wifi network
 sudo nmcli device wifi connect "$SSID" password "$PSK"
 
+sudo apt install -y \
+    systemd-zram
+
 # install config files
 sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
 
@@ -59,23 +67,10 @@ wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/upda
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
 rm ./update-nodejs-and-nodered
 
-# download and execute rust install script
-wget https://sh.rustup.rs -O ~/rustup-init.sh
-bash ~/rustup-init.sh -y
-rm ~/rustup-init.sh
-export PATH="$HOME/.cargo/bin:$PATH" # TODO: add cargo to path in fish config
-
 # download and execute miniconda install script
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3_install.sh
 bash ~/miniconda3_install.sh -b # conda will soon be intialized by importing the fish config
 rm ~/miniconda3_install.sh
-
-# compile and install zram-generator
-git clone https://github.com/systemd/zram-generator ~/zram-generator
-cd ~/zram-generator && make build && sudo make install NOBUILD=true && cd -
-rm -rf ~/zram-generator
-sudo systemctl daemon-reload
-sudo systemctl start /dev/zram0 # TODO: drop the swap partition that comes with Debian
 
 # install config files
 mkdir -p ~/.config
