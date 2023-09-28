@@ -44,7 +44,7 @@ sleep 10 # wait for wifi to be ready
 sudo nmcli device wifi connect "$SSID" password "$PSK"
 
 sudo apt install -y \
-    systemd-zram
+    cloudflared mosquitto nginx systemd-zram
 
 # install config files
 sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
@@ -73,7 +73,7 @@ sudo systemctl restart nginx
 # <USER>
 
 sudo apt install -y \
-    build-essential cloudflared curl fish htop mosquitto nginx pkg-config rclone ronn rsync vim
+    build-essential curl fish htop pkg-config rclone ronn rsync vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
