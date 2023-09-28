@@ -54,6 +54,18 @@ sudo update-grub
 sudo systemctl restart systemd-logind
 sudo systemctl restart NetworkManager
 
+# prepare revrss website root
+sudo mkdir /var/www/revrss.com
+sudo chown kenny /var/www/revrss.com/
+sudo chgrp kenny /var/www/revrss.com/
+sudo chmod +x /var/www/revrss.com/
+sudo ln -s /etc/nginx/sites-available/revrss /etc/nginx/sites-enabled/revrss
+ln -s /var/www/revrss.com ~/www.revrss.com
+
+# use the new nginx config
+sudo unlink /etc/nginx/sites-enabled/default
+sudo systemctl restart nginx
+
 # </ROOT>
 
 
@@ -81,15 +93,6 @@ unlink ~/.config/rclone # undo symlink b/c it eventually contains keys we don't 
 mkdir ~/.config/rclone  #  ...so we'll only copy the config files
 cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
 # rclone is not authorized yet, so authorize manually in recovery.sh
-
-# deal with nginx edge case
-sudo chmod +x /home
-sudo chmod +x /home/kenny
-sudo chmod +x /home/kenny/www
-sudo chmod +x /home/kenny/www/revrss
-sudo unlink /etc/nginx/sites-enabled/default
-sudo ln -s /etc/nginx/sites-available/revrss /etc/nginx/sites-enabled/revrss
-sudo systemctl restart nginx
 
 # other config
 crontab crontab.bak
