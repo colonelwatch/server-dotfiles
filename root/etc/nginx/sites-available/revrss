@@ -1,11 +1,17 @@
 server {
+	listen 5000;
+	listen [::]:5000;
+	server_name revrss.com;
+	return 301 $scheme://www.revrss.com$request_uri;
+}
+
+server {
 	listen 5000 default_server;
 	listen [::]:5000 default_server;
+	server_name www.revrss.com;
 
-	server_name revrss.com;
-	
 	root /var/www/revrss.com;
-	index rss.xml;
+	index index.html;
 
 	location / {
 		try_files $uri $uri/ =404;
