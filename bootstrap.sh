@@ -73,7 +73,7 @@ sudo systemctl restart nginx
 # <USER>
 
 sudo apt install -y \
-    build-essential curl fish htop pkg-config rclone ronn rsync vim
+    build-essential curl fish htop pkg-config rclone ronn rsync ruby-full vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
@@ -83,6 +83,11 @@ rm ./update-nodejs-and-nodered
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3_install.sh
 bash ~/miniconda3_install.sh -b # conda will soon be intialized by importing the fish config
 rm ~/miniconda3_install.sh
+
+# install jekyll and bundler
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
+gem install jekyll bundler
 
 # install config files
 mkdir -p ~/.config

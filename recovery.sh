@@ -22,3 +22,9 @@ sudo systemctl start nodered
 sudo ~/cloudflared/cloudflared service install
 sudo systemctl enable cloudflared
 sudo systemctl start cloudflared
+
+# previous website state was contained in the rclone backup
+ln -s /var/www/revrss.com ~/www.revrss.com
+cp ~/Services/revrss-newswires/data/newswires.xml ~/www.revrss.com/newswires.xml
+rsync --exclude='newswires.xml' -r ~/Services/revrss-website/_site/ ~/www.revrss.com/
+sudo systemctl restart nginx

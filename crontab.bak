@@ -1,5 +1,5 @@
 * 1 * * * bash /home/kenny/Services/run_rclone_sync.sh
 0 3-11,13-19 * * MON-FRI cd ~/Services/sec-edgar/ && bash ./scan.sh
 30,45,50,55 12 * * MON-FRI cd ~/Services/sec-edgar/ && bash ./scan.sh
-0,30 3-11,13-19 * * MON-FRI cd ~/Services/rss-scanner/ && bash ./scan.sh
-30,45,50,55 12 * * MON-FRI cd ~/Services/rss-scanner/ && bash ./scan.sh
+0,30 3-11,13-19 * * MON-FRI cd ~/Services/revrss-newswires/ && bash ./scan.sh
+30,45,50,55 12 * * MON-FRI cd ~/Services/revrss-newswires/ && bash ./scan.sh
