@@ -12,7 +12,7 @@ npm install node-red-contrib-smartnora # just add smartnora manually
 
 # install conda envs
 conda env create -f ~/Services/sec-edgar/environment.yml
-conda env create -f ~/Services/rss-scanner/environment.yml
+conda env create -f ~/Services/revrss-newswires/environment.yml
 
 # nodered config was contained in the rclone backup
 sudo systemctl enable nodered
