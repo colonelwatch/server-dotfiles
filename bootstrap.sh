@@ -42,6 +42,7 @@ sleep 10 # wait for wifi to be ready
 
 # connect it to the previously recorded wifi network
 sudo nmcli device wifi connect "$SSID" password "$PSK"
+sleep 10 # wait for wifi to connect
 
 sudo apt install -y \
     cloudflared mosquitto nginx systemd-zram
