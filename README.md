@@ -12,7 +12,7 @@ In case I need to nuke (or accidentally have nuked) the Debian install on my ser
     * Time zone, keyboard, and language are self-explanatory
     * Disable the root user (leave the root password empty)
     * The hostname should be `kenny-server`
-    * Nuke all partitions, and single-partition install
+    * Nuke all partitions, single-partition install, and no swap partition (delete it after guided partitioning but before continuing, proceed through the warning about not designating swap)
     * Turn off all desktop environments and turn on the SSH server
 
 ## Post-install
