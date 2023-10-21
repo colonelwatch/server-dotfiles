@@ -8,7 +8,8 @@ rclone config reconnect laptop_bak: --auto-confirm
 rclone copy server_bak: ~ -P --fast-list --checkers=32 --transfers=16
 rclone copy laptop_bak: ~/Laptop -P --fast-list --checkers=32 --transfers=16
 
-npm install node-red-contrib-smartnora # just add smartnora manually
+# just add smartnora manually
+cd ~/.node-red && npm install node-red-contrib-smartnora && cd -
 
 # install conda envs
 source ~/miniconda3/etc/profile.d/conda.sh
