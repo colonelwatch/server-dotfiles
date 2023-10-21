@@ -11,6 +11,7 @@ rclone copy laptop_bak: ~/Laptop -P --fast-list --checkers=32 --transfers=16
 npm install node-red-contrib-smartnora # just add smartnora manually
 
 # install conda envs
+source ~/miniconda3/etc/profile.d/conda.sh
 conda env create -f ~/Services/sec-edgar/environment.yml
 conda env create -f ~/Services/revrss-newswires/environment.yml
 
@@ -19,7 +20,7 @@ sudo systemctl enable nodered
 sudo systemctl start nodered
 
 # cloudfared secrets were contained in the rclone backup
-sudo ~/cloudflared/cloudflared service install
+sudo cloudflared service install
 sudo systemctl enable cloudflared
 sudo systemctl start cloudflared
 

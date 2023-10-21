@@ -6,6 +6,8 @@ if [ ! "$PWD" = "$HOME/.dotfiles" ]; then
     exit 1
 fi
 
+sudo apt install -y curl # install curl before everything
+
 sudo mkdir -p --mode=0755 /usr/share/keyrings
 
 # add cloudflared repo
@@ -74,7 +76,7 @@ sudo systemctl restart nginx
 # <USER>
 
 sudo apt install -y \
-    build-essential curl fish htop pkg-config rclone ronn rsync ruby-full vim
+    build-essential fish htop pkg-config rclone ronn rsync ruby-full vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
