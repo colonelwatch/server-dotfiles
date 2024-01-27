@@ -19,6 +19,9 @@ sudo wget https://nabijaczleweli.xyz/pgp.txt -O /etc/apt/keyrings/nabijaczleweli
 echo 'deb [signed-by=/etc/apt/keyrings/nabijaczleweli.asc] https://debian.nabijaczleweli.xyz bookworm main' | sudo tee -a /etc/apt/sources.list.d/zram-generator.list
 echo 'deb-src [signed-by=/etc/apt/keyrings/nabijaczleweli.asc] https://debian.nabijaczleweli.xyz bookworm main' | sudo tee -a /etc/apt/sources.list.d/zram-generator.list
 
+# update sources.list
+sudo cp root/etc/apt/sources.list /etc/apt/sources.list
+
 sudo apt update && sudo apt upgrade -y
 
 # </SETUP>
@@ -47,7 +50,8 @@ sudo nmcli device wifi connect "$SSID" password "$PSK"
 sleep 10 # wait for wifi to connect
 
 sudo apt install -y \
-    bolt cloudflared mosquitto nginx systemd-zram
+    bolt cloudflared firmware-misc-nonfree nvidia-driver mosquitto nginx \
+    systemd-zram
 
 # install config files
 sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
