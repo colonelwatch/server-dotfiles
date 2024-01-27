@@ -21,10 +21,12 @@ In case I need to nuke (or accidentally have nuked) the Debian install on my ser
 
 3. Clone this repository with the command `git clone https://github.com/colonelwatch/server-dotfiles .dotfiles`, call `cd .dotfiles && bash ./bootstrap.sh`
 
-4. Restart
+4. Authorize thunderbolt dock through `boltctl`
+
+5. Restart
 
 ## Post-bootstrap
 
-5. SSH with tunneling into the server by running the command `ssh -L 53682:localhost:53682 kenny@kenny-server` on another machine with a web browser
+6. SSH with tunneling into the server by running the command `ssh -L 53682:localhost:53682 kenny@kenny-server` on another machine with a web browser
 
-6. Call `cd .dotfiles && bash ./recovery.sh`, which includes manual prompts and recovery
+7. Call `cd .dotfiles && bash ./recovery.sh`, which includes manual prompts and recovery

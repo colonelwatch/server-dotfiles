@@ -47,7 +47,7 @@ sudo nmcli device wifi connect "$SSID" password "$PSK"
 sleep 10 # wait for wifi to connect
 
 sudo apt install -y \
-    cloudflared mosquitto nginx systemd-zram
+    bolt cloudflared mosquitto nginx systemd-zram
 
 # install config files
 sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
