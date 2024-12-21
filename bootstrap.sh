@@ -81,7 +81,7 @@ sudo systemctl restart nginx
 
 sudo apt install -y \
     build-essential ffmpeg fish htop parallel pkg-config rclone ronn rsync \
-    ruby-full vim
+    ruby-full screen vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
