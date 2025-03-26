@@ -50,7 +50,7 @@ sudo nmcli device wifi connect "$SSID" password "$PSK"
 sleep 10 # wait for wifi to connect
 
 sudo apt install -y \
-    bolt cloudflared firmware-misc-nonfree nvidia-driver mosquitto nginx \
+    bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto nginx \
     systemd-zram
 
 # install config files
