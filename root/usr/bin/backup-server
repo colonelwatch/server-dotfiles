@@ -1,0 +1,30 @@
+#!/bin/bash -e
+
+BACKUP_DIR="/media/auxiliary/backup"
+SERVER_BACKUP_DIR="$BACKUP_DIR/server"
+RSYNC_FLAGS="-a --delete"
+
+function sync_to_aux {
+	source_path="/home/kenny/$1"
+	target_path="$SERVER_BACKUP_DIR/$1"
+	shift 1
+
+	echo "syncing \"$source_path\" to \"$target_path\"..."
+	rsync "$source_path" "$target_path" $RSYNC_FLAGS $*
+}
+
+if [ ! -d "$BACKUP_DIR" ]; then
+	echo "error: backup subvolume does not exist"
+	exit 1
+fi
+
+if [ ! -d "$SERVER_BACKUP_DIR" ]; then
+	echo "making $SERVER_BACKUP_DIR..."
+	mkdir "$SERVER_BACKUP_DIR"
+fi
+
+sync_to_aux .node-red/ --exclude "{lib,node_modules}/**" &
+sync_to_aux .ssh/ &
+sync_to_aux .cloudflared/ &
+sync_to_aux Services/ &
+wait

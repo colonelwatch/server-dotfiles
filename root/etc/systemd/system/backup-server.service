@@ -1,0 +1,11 @@
+[Unit]
+Description=Sync working files to backup on auxiliary drive
+Wants=snapper-timeline.service
+Before=snapper-timeline.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/backup-server
+
+[Install]
+WantedBy=snapper-timeline.service

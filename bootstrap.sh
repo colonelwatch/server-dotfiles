@@ -51,15 +51,20 @@ sleep 10 # wait for wifi to connect
 
 sudo apt install -y \
     bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto nginx \
-    systemd-zram
+    snapper systemd-zram
 
 # install config files
 sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
 
-# use the new config files
+# immediately use the new config files
 sudo update-grub
 sudo systemctl restart systemd-logind
 sudo systemctl restart NetworkManager
+
+# enable my own services for the next boot
+sudo systemctl daemon-reload
+sudo systemctl enable backup-server
+sudo systemctl enable upload-snapshots
 
 # prepare revrss website root
 sudo mkdir /var/www/revrss.com

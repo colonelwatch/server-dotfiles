@@ -1,0 +1,16 @@
+[Unit]
+Description=Upload snapshots of backups to the cloud
+Requires=snapper-timeline.service
+After=snapper-timeline.service
+
+# double % here to escape systemd specifier parsing
+# TODO: drop need to use my own user to upload
+
+[Service]
+Type=oneshot
+User=kenny
+ExecCondition=bash -c "test $(date +%%u) = 7 -a $(date +%%H) = 1"
+ExecStart=/usr/bin/upload-snapshots
+
+[Install]
+WantedBy=snapper-timeline.service

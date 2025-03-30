@@ -10,4 +10,4 @@
 # <file system> <mount point>           <type>  <options>           <dump>  <pass>
 /dev/nvme0n1p2  /                       ext4    errors=remount-ro   0       1
 /dev/nvme0n1p1  /boot/efi               vfat    umask=0077          0       1
-LABEL=auxiliary /media/kenny/auxiliary  btrfs   noauto,x-systemd.automount,x-systemd.idle-timeout=60,x-systemd.device-timeout=5    0   0
+LABEL=auxiliary /media/auxiliary  btrfs   noauto,x-systemd.automount,x-systemd.idle-timeout=60,x-systemd.device-timeout=5    0   0
