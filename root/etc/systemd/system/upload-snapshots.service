@@ -9,7 +9,7 @@ After=snapper-timeline.service
 [Service]
 Type=oneshot
 User=kenny
-ExecCondition=bash -c "test $(date +%%u) = 1 -a $(date +%%H) = 0"
+ExecCondition=bash -c "test $(date +%%u) = 1 -a $(date +%%H) = 00"
 ExecStart=/usr/bin/upload-snapshots
 
 [Install]
