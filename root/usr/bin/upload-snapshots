@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 BACKUP_DIR="/media/auxiliary/backup"
-RCLONE_FLAGS="--fast-list --checkers=16 --transfers=8"
+RCLONE_FLAGS="--fast-list --checkers=8 --transfers=4"
 
 function sync_aux_to_cloud {
 	if [ ! -d "$BACKUP_DIR/.snapshots" ]; then
