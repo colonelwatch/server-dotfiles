@@ -11,8 +11,8 @@ done
 
 rclone config reconnect server_bak: --auto-confirm
 rclone config reconnect laptop_bak: --auto-confirm
-rclone sync server_bak: /media/auxiliary/backup/server -P --fast-list --checkers=8 --transfers=4
-rclone sync laptop_bak: /media/auxiliary/backup/laptop -P --fast-list --checkers=8 --transfers=4
+rclone --links -P --fast-list --checkers=8 --transfers=4 sync server_bak: /media/auxiliary/backup/server
+rclone --links -P --fast-list --checkers=8 --transfers=4 sync laptop_bak: /media/auxiliary/backup/laptop
 
 restore-permissions server
 restore-permissions laptop
