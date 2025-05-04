@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+cd "/media/auxiliary/backup/$1"
+
+# ensure the perms of perms.gz (or perms) itself isn't caught
+if [ -f perms.gz ]; then
+    rm perms.gz
+fi
+if [ -f perms ]; then
+    rm perms
+fi
+
+getfacl -R ./* ./.* > perms
+gzip perms

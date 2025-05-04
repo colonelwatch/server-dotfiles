@@ -64,6 +64,7 @@ sudo systemctl restart NetworkManager
 # enable my own services for the next boot
 sudo systemctl daemon-reload
 sudo systemctl enable backup-server
+sudo systemctl enable backup-permissions
 sudo systemctl enable upload-snapshots
 
 # prepare revrss website root
@@ -85,7 +86,7 @@ sudo systemctl restart nginx
 # <USER>
 
 sudo apt install -y \
-    build-essential ffmpeg fish htop parallel pkg-config rclone ronn rsync \
+    acl build-essential ffmpeg fish htop parallel pkg-config rclone ronn rsync \
     ruby-full screen vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered

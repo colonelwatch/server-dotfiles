@@ -1,0 +1,14 @@
+[Unit]
+Description=Record permissions in a format that can be uploaded to the cloud
+Wants=backup-server.service
+After=backup-server.service
+Before=snapper-timeline.service
+
+[Service]
+Type=oneshot
+User=kenny
+ExecStart=/usr/bin/backup-permissions server
+ExecStart=/usr/bin/backup-permissions laptop
+
+[Install]
+WantedBy=upload-snapshots.service
