@@ -5,6 +5,7 @@ Before=snapper-timeline.service
 
 [Service]
 Type=oneshot
+User=kenny
 ExecStart=/usr/bin/backup-server
 
 [Install]
