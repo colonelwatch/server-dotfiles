@@ -2,12 +2,23 @@ chsh -s /usr/bin/fish # change default shell to fish
 
 fish -c "conda config --set auto_activate_base false" # disable conda auto-activation
 
-mkdir -p /media/auxiliary/backup/laptop
-ln -s /media/auxiliary/backup/laptop ~/Laptop
+# TODO: set up the rest of the drive if it's not ready
+for p in "/media/auxiliary/backup/server" "/media/auxiliary/backup/laptop"; do
+    if [ ! -d "$p"]; then
+        mkdir "$p"
+    fi
+done
+
 rclone config reconnect server_bak: --auto-confirm
 rclone config reconnect laptop_bak: --auto-confirm
-rclone copy server_bak: ~ -P --fast-list --checkers=16 --transfers=8 && backup-server
-rclone sync laptop_bak: ~/Laptop -P --fast-list --checkers=16 --transfers=8
+rclone sync server_bak: /media/auxiliary/backup/server -P --fast-list --checkers=8 --transfers=4
+rclone sync laptop_bak: /media/auxiliary/backup/laptop -P --fast-list --checkers=8 --transfers=4
+
+restore-permissions server
+restore-permissions laptop
+
+cp -r /media/auxiliary/backup/server ~
+ln -s /media/auxiliary/backup/laptop ~/Laptop
 
 # just add smartnora manually
 cd ~/.node-red && npm install node-red-contrib-smartnora && cd -

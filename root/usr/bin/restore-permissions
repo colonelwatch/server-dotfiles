@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+cd "/media/auxiliary/backup/$1"
+
+if [ ! -f "perms.gz"]; then
+    echo "error: perms.gz not found"
+    exit 1
+fi
+
+gunzip perms.gz
+setfacl --restore=perms
+rm perms
