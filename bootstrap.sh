@@ -103,7 +103,7 @@ function get_nodered {
 function get_miniconda {
     if [ -d ~/miniconda3 ]; then
         source ~/miniconda3/bin/activate
-        conda update -n base -c defaults conda
+        conda update -y -n base -c defaults conda
         return 0
     fi 
 
