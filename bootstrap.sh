@@ -68,8 +68,7 @@ function do_root {
         bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto  \
         nginx snapper systemd-zram-generator
     sudo apt install -y \
-        acl build-essential ffmpeg fish htop parallel pkg-config rclone ronn rsync  \
-        ruby-full screen vim
+        acl build-essential ffmpeg htop parallel rclone rsync ruby-full screen vim
     sudo ln -s -f root/usr/bin/* /usr/bin/
 
     # install config files, including service files

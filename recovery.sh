@@ -1,7 +1,3 @@
-chsh -s /usr/bin/fish # change default shell to fish
-
-fish -c "conda config --set auto_activate_base false" # disable conda auto-activation
-
 # TODO: set up the rest of the drive if it's not ready
 for p in "/media/auxiliary/backup/server" "/media/auxiliary/backup/laptop"; do
     if [ ! -d "$p"]; then
