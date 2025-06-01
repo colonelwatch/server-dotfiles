@@ -87,6 +87,53 @@ function do_root {
 }
 
 
+function get_nodered {
+    wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
+    bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
+    rm ./update-nodejs-and-nodered
+}
+
+
+function get_miniconda {
+    if [ -d ~/miniconda3 ]; then
+        source ~/miniconda3/bin/activate
+        conda update -n base -c defaults conda
+        return 0
+    fi 
+
+    # download and execute miniconda install script
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh  \
+        -O ~/miniconda3_install.sh
+    bash ~/miniconda3_install.sh -b
+    rm ~/miniconda3_install.sh
+}
+
+
+function get_jekyll {
+    GEM_HOME="$HOME/gems" PATH="$HOME/gems/bin:$PATH" gem install jekyll bundler
+}
+
+
+function do_user {
+    get_nodered
+    get_miniconda
+    get_jekyll
+
+    # install config files
+    mkdir -p ~/.config
+    ln -s -f config/* ~/.config/
+
+    # deal with rclone config edge case
+    unlink ~/.config/rclone # undo symlink b/c it eventually contains keys...
+    mkdir ~/.config/rclone  #  ...so we'll only copy the config files
+    cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
+    # rclone is not authorized yet, so authorize manually in recovery.sh
+
+    # other config
+    crontab crontab.bak
+}
+
+
 # check if pwd is ~/.dotfiles
 if [ ! "$PWD" = "$HOME/.dotfiles" ]; then
     echo "Please run this script from the ~/.dotfiles directory."
@@ -95,40 +142,4 @@ fi
 
 do_setup
 do_root
-
-
-
-# <USER>
-
-wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
-bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
-rm ./update-nodejs-and-nodered
-
-# download and execute miniconda install script
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3_install.sh
-bash ~/miniconda3_install.sh -b # conda will soon be intialized by importing the fish config
-rm ~/miniconda3_install.sh
-
-# install jekyll and bundler
-GEM_HOME="$HOME/gems" PATH="$HOME/gems/bin:$PATH" gem install jekyll bundler
-
-# install config files
-mkdir -p ~/.config
-ln -s -f config/* ~/.config/
-
-# deal with rclone config edge case
-unlink ~/.config/rclone # undo symlink b/c it eventually contains keys we don't want to commit...
-mkdir ~/.config/rclone  #  ...so we'll only copy the config files
-cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
-# rclone is not authorized yet, so authorize manually in recovery.sh
-
-# other config
-crontab crontab.bak
-
-# </USER>
-
-
-
-# <CLEANUP>
-
-# </CLEANUP>
+do_user
