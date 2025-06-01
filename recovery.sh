@@ -11,6 +11,9 @@ fi
 cp -r "$AUX_BACKUP_DIR/server" ~
 ln -s "$AUX_BACKUP_DIR/laptop" ~/Laptop
 
+# reenable snapper
+sudo systemctl enable snapper-*.timer
+
 # just add smartnora manually
 cd ~/.node-red && npm install node-red-contrib-smartnora && cd -
 

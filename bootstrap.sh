@@ -44,6 +44,13 @@ function do_networking {
 }
 
 
+function suspend_snapper {
+    # snapper-*.timer seems to cover all auto-enabled snapper services
+    sudo systemctl disable snapper-*.timer
+    sudo systemctl stop snapper-*.timer
+}
+
+
 function do_revrss_website {
     if [ -d /var/www/revrss.com ]; then
         return 0  # skip, since this step is already done
@@ -75,18 +82,14 @@ function do_root {
         ruby-full screen vim
     sudo ln -s -f root/usr/bin/* /usr/bin/
 
+    # (pre-config) other setup
+    sudo update-grub  # grub needs to be further applied
+    suspend_snapper  # will reenable in recovery.sh, after ensuring data
+    do_revrss_website
+
     # install config files, including service files
     sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
     sudo systemctl daemon-reload  # immediately use the service files
-
-    # enable services for the next boot
-    sudo systemctl enable backup-server
-    sudo systemctl enable backup-permissions
-    sudo systemctl enable upload-snapshots
-
-    # other setup
-    sudo update-grub  # grub needs to be further applied
-    do_revrss_website
 }
 
 
