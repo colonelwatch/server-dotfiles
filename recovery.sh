@@ -18,7 +18,7 @@ sudo systemctl enable snapper-*.timer
 cd ~/.node-red && npm install node-red-contrib-smartnora && cd -
 
 # install conda envs
-source ~/miniconda3/etc/profile.d/conda.sh
+source ~/miniconda3/bin/activate && conda deactivate
 conda env create -f ~/Services/sec-edgar/environment.yml
 conda env create -f ~/Services/revrss-newswires/environment.yml
 
