@@ -104,9 +104,7 @@ bash ~/miniconda3_install.sh -b # conda will soon be intialized by importing the
 rm ~/miniconda3_install.sh
 
 # install jekyll and bundler
-export GEM_HOME="$HOME/gems"
-export PATH="$HOME/gems/bin:$PATH"
-gem install jekyll bundler
+GEM_HOME="$HOME/gems" PATH="$HOME/gems/bin:$PATH" gem install jekyll bundler
 
 # install config files
 mkdir -p ~/.config
