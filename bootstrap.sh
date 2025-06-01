@@ -42,6 +42,58 @@ function do_networking {
 }
 
 
+function install_services {
+    # install packages
+    sudo apt install -y \
+        bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto  \
+        nginx snapper systemd-zram-generator
+
+    # install scripts
+    sudo ln -s -f root/usr/bin/* /usr/bin/
+}
+
+
+function do_revrss_website {
+    # prepare revrss website root
+    sudo mkdir /var/www/revrss.com
+    sudo chown kenny /var/www/revrss.com/
+    sudo chgrp kenny /var/www/revrss.com/
+    sudo chmod +x /var/www/revrss.com/
+    sudo ln -s /etc/nginx/sites-available/revrss /etc/nginx/sites-enabled/revrss
+    ln -s /var/www/revrss.com ~/www.revrss.com
+
+    # use the new nginx config
+    sudo unlink /etc/nginx/sites-enabled/default
+}
+
+
+function install_utilities {
+    sudo apt install -y \
+        acl build-essential ffmpeg fish htop parallel pkg-config rclone ronn rsync  \
+        ruby-full screen vim
+}
+
+
+function do_root {
+    do_networking
+    install_services
+
+    # install config files, including service files
+    sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
+    sudo systemctl daemon-reload  # immediately use the service files
+
+    # enable my own services for the next boot
+    sudo systemctl enable backup-server
+    sudo systemctl enable backup-permissions
+    sudo systemctl enable upload-snapshots
+
+    # other setup
+    sudo update-grub  # grub needs to be further applied
+    do_revrss_website
+    install_utilities
+}
+
+
 # check if pwd is ~/.dotfiles
 if [ ! "$PWD" = "$HOME/.dotfiles" ]; then
     echo "Please run this script from the ~/.dotfiles directory."
@@ -49,50 +101,11 @@ if [ ! "$PWD" = "$HOME/.dotfiles" ]; then
 fi
 
 do_setup
-
-
-
-# <ROOT>
-
-do_networking
-
-sudo apt install -y \
-    bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto nginx \
-    snapper systemd-zram-generator
-
-# install config files
-sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
-sudo update-grub  # grub needs to be further applied
-
-# install scripts
-sudo ln -s -f root/usr/bin/* /usr/bin/
-
-# enable my own services for the next boot
-sudo systemctl daemon-reload
-sudo systemctl enable backup-server
-sudo systemctl enable backup-permissions
-sudo systemctl enable upload-snapshots
-
-# prepare revrss website root
-sudo mkdir /var/www/revrss.com
-sudo chown kenny /var/www/revrss.com/
-sudo chgrp kenny /var/www/revrss.com/
-sudo chmod +x /var/www/revrss.com/
-sudo ln -s /etc/nginx/sites-available/revrss /etc/nginx/sites-enabled/revrss
-ln -s /var/www/revrss.com ~/www.revrss.com
-
-# use the new nginx config
-sudo unlink /etc/nginx/sites-enabled/default
-
-# </ROOT>
+do_root
 
 
 
 # <USER>
-
-sudo apt install -y \
-    acl build-essential ffmpeg fish htop parallel pkg-config rclone ronn rsync \
-    ruby-full screen vim
 
 wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
