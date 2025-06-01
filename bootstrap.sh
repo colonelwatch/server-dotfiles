@@ -69,6 +69,9 @@ sudo update-grub
 sudo systemctl restart systemd-logind
 sudo systemctl restart NetworkManager
 
+# install scripts
+sudo ln -s -f $PWD/root/usr/bin/* /usr/bin/
+
 # enable my own services for the next boot
 sudo systemctl daemon-reload
 sudo systemctl enable backup-server
