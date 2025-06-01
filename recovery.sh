@@ -1,3 +1,5 @@
+#!/bin/bash -e
+
 AUX_BACKUP_DIR="/media/auxiliary/backup"
 
 if [ ! -d "$AUX_BACKUP_DIR/server" -o ! -d "$AUX_BACKUP_DIR/laptop" ]; then

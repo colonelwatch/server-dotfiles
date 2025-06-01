@@ -1,3 +1,5 @@
+#!/bin/bash -e
+
 function do_setup {
     # install curl, get add cloudflare gpg key
     sudo apt install -y curl
