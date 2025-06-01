@@ -65,7 +65,7 @@ sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
 sudo update-grub  # grub needs to be further applied
 
 # install scripts
-sudo ln -s -f $PWD/root/usr/bin/* /usr/bin/
+sudo ln -s -f root/usr/bin/* /usr/bin/
 
 # enable my own services for the next boot
 sudo systemctl daemon-reload
@@ -110,7 +110,7 @@ gem install jekyll bundler
 
 # install config files
 mkdir -p ~/.config
-ln -s -f $PWD/config/* ~/.config/
+ln -s -f config/* ~/.config/
 
 # deal with rclone config edge case
 unlink ~/.config/rclone # undo symlink b/c it eventually contains keys we don't want to commit...
