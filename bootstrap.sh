@@ -114,6 +114,14 @@ function get_jekyll {
 }
 
 
+function patch_rclone {
+    unlink ~/.config/rclone # undo symlink b/c it eventually contains keys...
+    mkdir ~/.config/rclone  #  ...so we'll only copy the config files
+    cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
+    # rclone is not authorized yet, so authorize manually in recovery.sh
+}
+
+
 function do_user {
     get_nodered
     get_miniconda
@@ -123,13 +131,8 @@ function do_user {
     mkdir -p ~/.config
     ln -s -f config/* ~/.config/
 
-    # deal with rclone config edge case
-    unlink ~/.config/rclone # undo symlink b/c it eventually contains keys...
-    mkdir ~/.config/rclone  #  ...so we'll only copy the config files
-    cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
-    # rclone is not authorized yet, so authorize manually in recovery.sh
-
     # other config
+    patch_rclone
     crontab crontab.bak
 }
 
