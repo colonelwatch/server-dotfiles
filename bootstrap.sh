@@ -43,6 +43,10 @@ function do_networking {
 
 
 function do_revrss_website {
+    if [ -d /var/www/revrss.com ]; then
+        return 0  # skip, since this step is already done
+    done
+
     # prepare revrss website root
     sudo mkdir /var/www/revrss.com
     sudo chown kenny /var/www/revrss.com/
