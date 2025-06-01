@@ -42,17 +42,6 @@ function do_networking {
 }
 
 
-function install_services {
-    # install packages
-    sudo apt install -y \
-        bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto  \
-        nginx snapper systemd-zram-generator
-
-    # install scripts
-    sudo ln -s -f root/usr/bin/* /usr/bin/
-}
-
-
 function do_revrss_website {
     # prepare revrss website root
     sudo mkdir /var/www/revrss.com
@@ -67,22 +56,23 @@ function do_revrss_website {
 }
 
 
-function install_utilities {
+function do_root {
+    do_networking
+
+    # install packages, utilities, and scripts
+    sudo apt install -y \
+        bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto  \
+        nginx snapper systemd-zram-generator
     sudo apt install -y \
         acl build-essential ffmpeg fish htop parallel pkg-config rclone ronn rsync  \
         ruby-full screen vim
-}
-
-
-function do_root {
-    do_networking
-    install_services
+    sudo ln -s -f root/usr/bin/* /usr/bin/
 
     # install config files, including service files
     sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
     sudo systemctl daemon-reload  # immediately use the service files
 
-    # enable my own services for the next boot
+    # enable services for the next boot
     sudo systemctl enable backup-server
     sudo systemctl enable backup-permissions
     sudo systemctl enable upload-snapshots
@@ -90,7 +80,6 @@ function do_root {
     # other setup
     sudo update-grub  # grub needs to be further applied
     do_revrss_website
-    install_utilities
 }
 
 
