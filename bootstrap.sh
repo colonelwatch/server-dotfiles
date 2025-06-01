@@ -62,11 +62,7 @@ sudo apt install -y \
 
 # install config files
 sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
-
-# immediately use the new config files
-sudo update-grub
-sudo systemctl restart systemd-logind
-sudo systemctl restart NetworkManager
+sudo update-grub  # grub needs to be further applied
 
 # install scripts
 sudo ln -s -f $PWD/root/usr/bin/* /usr/bin/
@@ -87,7 +83,6 @@ ln -s /var/www/revrss.com ~/www.revrss.com
 
 # use the new nginx config
 sudo unlink /etc/nginx/sites-enabled/default
-sudo systemctl restart nginx
 
 # </ROOT>
 

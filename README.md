@@ -30,3 +30,5 @@ In case I need to nuke (or accidentally have nuked) the Debian install on my ser
 6. SSH with tunneling into the server by running the command `ssh -L 53682:localhost:53682 kenny@kenny-server` on another machine with a web browser
 
 7. Call `cd .dotfiles && bash ./recovery.sh`, which includes manual prompts and recovery
+
+8. Restart
