@@ -1,3 +1,17 @@
+function do_setup {
+    # install curl, get add cloudflare gpg key
+    sudo apt install -y curl
+    sudo mkdir -p --mode=0755 /usr/share/keyrings
+    curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg |         \
+        sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
+
+    # configure apt
+    sudo cp -rvf --no-preserve=mode,ownership root/etc/apt/* /etc/apt/
+
+    sudo apt update && sudo apt upgrade -y
+}
+
+
 function do_networking {
     if dpkg-query -Wf'${db:Status-abbrev}' network-manager | grep -q '^i'; then
         return 0  # network-manager is already installed, so skip
@@ -28,28 +42,13 @@ function do_networking {
 }
 
 
-# <SETUP>
-
 # check if pwd is ~/.dotfiles
 if [ ! "$PWD" = "$HOME/.dotfiles" ]; then
     echo "Please run this script from the ~/.dotfiles directory."
     exit 1
 fi
 
-sudo apt install -y curl # install curl before everything
-
-sudo mkdir -p --mode=0755 /usr/share/keyrings
-
-# add cloudflare gpg key
-curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg |         \
-    sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
-
-# configure apt
-sudo cp -rvf --no-preserve=mode,ownership root/etc/apt/* /etc/apt/
-
-sudo apt update && sudo apt upgrade -y
-
-# </SETUP>
+do_setup
 
 
 
