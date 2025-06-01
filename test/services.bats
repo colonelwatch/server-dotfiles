@@ -1,0 +1,3 @@
+@test "download latest revrss feed" {
+    wget https://www.revrss.com/newswires.xml
+}

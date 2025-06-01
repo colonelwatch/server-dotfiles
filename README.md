@@ -35,4 +35,6 @@ In case I need to nuke (or accidentally have nuked) the Debian install on my ser
 
 9. Restart
 
-10. Reenable the backup procedures that were targeting the server
+10. Call `cd .dotfiles && bats test`, which runs some checks
+
+11. Reenable the backup procedures that were targeting the server

@@ -78,7 +78,7 @@ function do_root {
     sudo apt install -y \
         cloudflared mosquitto nginx snapper
     sudo apt install -y \
-        acl btrfs-progs build-essential ffmpeg htop parallel rclone rsync   \
+        acl bats btrfs-progs build-essential ffmpeg htop parallel rclone rsync  \
         ruby-full screen vim
     sudo ln -s -f root/usr/bin/* /usr/bin/
 
