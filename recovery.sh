@@ -1,20 +1,13 @@
-# TODO: set up the rest of the drive if it's not ready
-for p in "/media/auxiliary/backup/server" "/media/auxiliary/backup/laptop"; do
-    if [ ! -d "$p"]; then
-        mkdir "$p"
-    fi
-done
+AUX_BACKUP_DIR="/media/auxiliary/backup"
 
-rclone config reconnect server_bak: --auto-confirm
-rclone config reconnect laptop_bak: --auto-confirm
-rclone --links -P --fast-list --checkers=8 --transfers=4 sync server_bak: /media/auxiliary/backup/server
-rclone --links -P --fast-list --checkers=8 --transfers=4 sync laptop_bak: /media/auxiliary/backup/laptop
+if [ ! -d "$AUX_BACKUP_DIR/server" -o ! -d "$AUX_BACKUP_DIR/laptop" ]; then
+    # TODO: define how to recover either from the cloud or the cold storage drive
+    echo "error: backup on auxilary drive is unavailable"
+    exit 1
+fi
 
-restore-permissions server
-restore-permissions laptop
-
-cp -r /media/auxiliary/backup/server ~
-ln -s /media/auxiliary/backup/laptop ~/Laptop
+cp -r "$AUX_BACKUP_DIR/server" ~
+ln -s "$AUX_BACKUP_DIR/laptop" ~/Laptop
 
 # just add smartnora manually
 cd ~/.node-red && npm install node-red-contrib-smartnora && cd -
