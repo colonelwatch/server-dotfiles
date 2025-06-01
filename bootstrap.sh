@@ -63,12 +63,14 @@ function do_revrss_website {
 function do_root {
     do_networking
 
-    # install packages, utilities, and scripts
+    # install essentials, services, utilities, and scripts
     sudo apt install -y \
-        bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto  \
-        nginx snapper systemd-zram-generator
+        bolt firmware-misc-nonfree nvidia-driver systemd-zram-generator
     sudo apt install -y \
-        acl build-essential ffmpeg htop parallel rclone rsync ruby-full screen vim
+        cloudflared mosquitto nginx snapper
+    sudo apt install -y \
+        acl btrfs-progs build-essential ffmpeg htop parallel rclone rsync   \
+        ruby-full screen vim
     sudo ln -s -f root/usr/bin/* /usr/bin/
 
     # install config files, including service files
