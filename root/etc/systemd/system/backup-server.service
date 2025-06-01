@@ -1,6 +1,5 @@
 [Unit]
 Description=Sync working files to backup on auxiliary drive
-Wants=snapper-timeline.service
 Before=snapper-timeline.service
 
 [Service]
