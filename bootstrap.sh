@@ -40,12 +40,12 @@ sudo apt install -y curl # install curl before everything
 
 sudo mkdir -p --mode=0755 /usr/share/keyrings
 
-# add cloudflared repo
-curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
-echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+# add cloudflare gpg key
+curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg |         \
+    sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
 
-# update sources.list
-sudo cp root/etc/apt/sources.list /etc/apt/sources.list
+# configure apt
+sudo cp -rvf --no-preserve=mode,ownership root/etc/apt/* /etc/apt/
 
 sudo apt update && sudo apt upgrade -y
 
