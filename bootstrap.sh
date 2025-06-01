@@ -1,3 +1,33 @@
+function do_networking {
+    if dpkg-query -Wf'${db:Status-abbrev}' network-manager | grep -q '^i'; then
+        return 0  # network-manager is already installed, so skip
+    fi
+
+    # install packages for NetworkManager and resolved (for mDNS features)
+    sudo apt install -y network-manager systemd-resolved
+
+    # record wifi config from /etc/network/interfaces
+    ssid=$(sudo cat /etc/network/interfaces | grep wpa-ssid | sed 's/\twpa-ssid *//')
+    psk=$(sudo cat /etc/network/interfaces | grep wpa-psk | sed 's/\twpa-psk *//')
+
+    # delete wifi config, thus giving control from networking.service to NetworkManager
+    temp=$(mktemp)
+    sudo cat /etc/network/interfaces | head -8 > "$temp"
+    sudo mv "$temp" /etc/network/interfaces
+
+    # Apply transition by stopping and disabling networking.service and then restarting
+    # NetworkManager (resolved and NetworkManager are already enabled upon install)
+    sudo systemctl disable networking
+    sudo systemctl stop networking
+    sudo systemctl restart systemd-resolved wpa_supplicant  # first, dependencies of NM
+    sudo systemctl restart NetworkManager
+
+    # connect it to the previously recorded wifi network
+    sleep 10 # wait for wifi to be ready
+    sudo nmcli device wifi connect "$ssid" password "$psk"
+}
+
+
 # <SETUP>
 
 # check if pwd is ~/.dotfiles
@@ -14,11 +44,6 @@ sudo mkdir -p --mode=0755 /usr/share/keyrings
 curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
 echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
 
-# add zram-generator repo
-sudo wget https://nabijaczleweli.xyz/pgp.txt -O /etc/apt/keyrings/nabijaczleweli.asc
-echo 'deb [signed-by=/etc/apt/keyrings/nabijaczleweli.asc] https://debian.nabijaczleweli.xyz bookworm main' | sudo tee -a /etc/apt/sources.list.d/zram-generator.list
-echo 'deb-src [signed-by=/etc/apt/keyrings/nabijaczleweli.asc] https://debian.nabijaczleweli.xyz bookworm main' | sudo tee -a /etc/apt/sources.list.d/zram-generator.list
-
 # update sources.list
 sudo cp root/etc/apt/sources.list /etc/apt/sources.list
 
@@ -30,28 +55,11 @@ sudo apt update && sudo apt upgrade -y
 
 # <ROOT>
 
-# record wifi config from /etc/network/interfaces
-SSID=$(sudo cat /etc/network/interfaces | grep wpa-ssid | sed 's/\twpa-ssid *//')
-PSK=$(sudo cat /etc/network/interfaces | grep wpa-psk | sed 's/\twpa-psk *//')
-
-# install NetworkManager and resolved (for mDNS features) and stop networking.service from using the wifi
-sudo apt install -y network-manager systemd-resolved
-sudo cat /etc/network/interfaces | head -8 > ./interfaces # prepare interfaces file without wifi config
-cat ./interfaces | sudo tee /etc/network/interfaces
-rm ./interfaces # remove interfaces file
-sudo systemctl restart networking wpa_supplicant
-sudo systemctl restart NetworkManager systemd-resolved
-sudo nmcli radio wifi off
-sudo nmcli radio wifi on
-sleep 10 # wait for wifi to be ready
-
-# connect it to the previously recorded wifi network
-sudo nmcli device wifi connect "$SSID" password "$PSK"
-sleep 10 # wait for wifi to connect
+do_networking
 
 sudo apt install -y \
     bolt btrfs-progs cloudflared firmware-misc-nonfree nvidia-driver mosquitto nginx \
-    snapper systemd-zram
+    snapper systemd-zram-generator
 
 # install config files
 sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
