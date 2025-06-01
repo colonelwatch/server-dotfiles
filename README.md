@@ -6,9 +6,11 @@ In case I need to nuke (or accidentally have nuked) the Debian install on my ser
 
 0. Enable Wake On AC and set a battery charge limit at 70%
 
+1. Disable any backup procedures targeting the server
+
 ## Install
 
-1. Booting from the install disk for Debian 12 (non-free drivers now included by default), proceed through the non-graphical install process.
+2. Booting from the install disk for Debian 12 (non-free drivers now included by default), proceed through the non-graphical install process.
     * Time zone, keyboard, and language are self-explanatory
     * Disable the root user (leave the root password empty)
     * The hostname should be `kenny-server`
@@ -17,18 +19,20 @@ In case I need to nuke (or accidentally have nuked) the Debian install on my ser
 
 ## Post-install
 
-2. Install `git` with the command `sudo apt install git`
+3. Install `git` with the command `sudo apt install git`
 
-3. Clone this repository with the command `git clone https://github.com/colonelwatch/server-dotfiles .dotfiles`, call `cd .dotfiles && ./bootstrap.sh`
+4. Clone this repository with the command `git clone https://github.com/colonelwatch/server-dotfiles .dotfiles`, call `cd .dotfiles && ./bootstrap.sh`
 
-4. Authorize thunderbolt dock through `boltctl`
+5. Authorize thunderbolt dock through `boltctl`
 
-5. Restart
+6. Restart
 
 ## Post-bootstrap
 
-6. SSH with tunneling into the server by running the command `ssh -L 53682:localhost:53682 kenny@kenny-server` on another machine with a web browser
+7. SSH with tunneling into the server by running the command `ssh -L 53682:localhost:53682 kenny@kenny-server` on another machine with a web browser
 
-7. Call `cd .dotfiles && ./recovery.sh`, which includes manual prompts and recovery
+8. Call `cd .dotfiles && ./recovery.sh`, which includes manual prompts and recovery
 
-8. Restart
+9. Restart
+
+10. Reenable the backup procedures that were targeting the server
