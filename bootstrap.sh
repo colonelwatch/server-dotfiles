@@ -143,6 +143,10 @@ function do_user {
 
     # install config files
     mkdir -p ~/.config
+    if [ -d ~/.config/rclone ]; then
+        # ln fails if the rclone config is already patched, so delete it
+        rm -rf ~/.config/rclone
+    fi
     ln -s -f config/* ~/.config/
 
     # other config
