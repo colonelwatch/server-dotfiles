@@ -82,7 +82,7 @@ function do_root {
     sudo apt install -y \
         acl bats bats-assert bats-support bats-file btrfs-progs build-essential     \
         ffmpeg htop parallel rclone rsync ruby-full screen vim
-    sudo ln -s -f root/usr/bin/* /usr/bin/
+    sudo ln -s -f $PWD/root/usr/bin/* /usr/bin/
 
     # (pre-config) other setup
     suspend_snapper  # will reenable in recovery.sh, after ensuring data
@@ -147,7 +147,7 @@ function do_user {
         # ln fails if the rclone config is already patched, so delete it
         rm -rf ~/.config/rclone
     fi
-    ln -s -f config/* ~/.config/
+    ln -s -f $PWD/config/* ~/.config/
 
     # other config
     patch_rclone
