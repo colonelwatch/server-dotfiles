@@ -12,7 +12,9 @@ rsync -a "$AUX_BACKUP_DIR/server/" ~/
 ln -s -f "$AUX_BACKUP_DIR/laptop" ~/Laptop
 
 # reenable snapper
-sudo systemctl enable snapper-*.timer
+sudo systemctl enable snapper-cleanup.timer
+sudo systemctl enable snapper-timeline.timer
+sudo systemctl enable snapper-boot.timer
 
 # install conda envs
 source ~/miniconda3/bin/activate && conda deactivate
