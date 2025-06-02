@@ -8,8 +8,8 @@ if [ ! -d "$AUX_BACKUP_DIR/server" -o ! -d "$AUX_BACKUP_DIR/laptop" ]; then
     exit 1
 fi
 
-cp -r "$AUX_BACKUP_DIR/server" ~
-ln -s "$AUX_BACKUP_DIR/laptop" ~/Laptop
+rsync -a "$AUX_BACKUP_DIR/server/" ~/
+ln -s -f "$AUX_BACKUP_DIR/laptop" ~/Laptop
 
 # reenable snapper
 sudo systemctl enable snapper-*.timer
@@ -30,6 +30,6 @@ sudo cloudflared service install
 sudo systemctl enable cloudflared
 
 # previous website state was contained in the backup
-ln -s /var/www/revrss.com ~/www.revrss.com
+ln -s -f /var/www/revrss.com ~/www.revrss.com
 cp ~/Services/revrss-newswires/data/newswires.xml ~/www.revrss.com/newswires.xml
 rsync --exclude='newswires.xml' -r ~/Services/revrss-website/_site/ ~/www.revrss.com/
