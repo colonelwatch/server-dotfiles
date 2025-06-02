@@ -28,7 +28,9 @@ cd -
 sudo systemctl enable nodered
 
 # cloudfared secrets were in the backup
-sudo cloudflared service install
+if [ ! -f /etc/systemd/system/cloudflared.service ]; then
+    sudo cloudflared service install
+fi
 sudo systemctl enable cloudflared
 
 # previous website state was contained in the backup
