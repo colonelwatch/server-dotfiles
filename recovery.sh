@@ -14,22 +14,22 @@ ln -s "$AUX_BACKUP_DIR/laptop" ~/Laptop
 # reenable snapper
 sudo systemctl enable snapper-*.timer
 
-# just add smartnora manually
-cd ~/.node-red && npm install node-red-contrib-smartnora && cd -
-
 # install conda envs
 source ~/miniconda3/bin/activate && conda deactivate
 conda env create -f ~/Services/sec-edgar/environment.yml
 conda env create -f ~/Services/revrss-newswires/environment.yml
 
-# nodered config was contained in the rclone backup
+# nodered state was in the backup, but add smartnora manually
+cd ~/.node-red
+npm install node-red-contrib-smartnora
+cd -
 sudo systemctl enable nodered
 
-# cloudfared secrets were contained in the rclone backup
+# cloudfared secrets were in the backup
 sudo cloudflared service install
 sudo systemctl enable cloudflared
 
-# previous website state was contained in the rclone backup
+# previous website state was contained in the backup
 ln -s /var/www/revrss.com ~/www.revrss.com
 cp ~/Services/revrss-newswires/data/newswires.xml ~/www.revrss.com/newswires.xml
 rsync --exclude='newswires.xml' -r ~/Services/revrss-website/_site/ ~/www.revrss.com/
