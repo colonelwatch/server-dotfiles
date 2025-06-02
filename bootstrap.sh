@@ -122,6 +122,10 @@ function get_jekyll {
 
 
 function patch_rclone {
+    if [ -d ~/.config/rclone ]; then
+        return 0  # skip, since this step was already done
+    fi
+
     unlink ~/.config/rclone # undo symlink b/c it eventually contains keys...
     mkdir ~/.config/rclone  #  ...so we'll only copy the config files
     cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
