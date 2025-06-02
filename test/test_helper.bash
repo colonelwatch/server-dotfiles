@@ -19,8 +19,16 @@ function check_service {
     assert_success
     assert_output "enabled"
 
-    run systemctl show "$service"
+    # Check if the service is a oneshot, and skip the ActiveState check if so
+    # NOTE: timers don't have a Type field, so $type is then empty, but the
+    #       expected value of their ActiveState field is still "active"
+    run systemctl show -p Type --value "$service"
     assert_success
-    assert_line "ActiveState=active"
-    assert_line "SubState=running"
+    if [ "$output" == "oneshot" ]; then
+        return 0
+    fi
+
+    run systemctl is-active "$service"
+    assert_success
+    assert_line "active"
 }
