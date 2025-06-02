@@ -44,9 +44,12 @@ function do_networking {
 
 
 function suspend_snapper {
-    # snapper-*.timer seems to cover all auto-enabled snapper services
-    sudo systemctl disable snapper-*.timer
-    sudo systemctl stop snapper-*.timer
+    sudo systemctl disable snapper-cleanup.timer
+    sudo systemctl disable snapper-timeline.timer
+    sudo systemctl disable snapper-boot.timer
+    sudo systemctl stop snapper-cleanup.timer
+    sudo systemctl stop snapper-timeline.timer
+    sudo systemctl stop snapper-boot.timer
 }
 
 
