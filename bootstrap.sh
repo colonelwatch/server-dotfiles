@@ -82,13 +82,15 @@ function do_root {
     sudo ln -s -f root/usr/bin/* /usr/bin/
 
     # (pre-config) other setup
-    sudo update-grub  # grub needs to be further applied
     suspend_snapper  # will reenable in recovery.sh, after ensuring data
     do_revrss_website
 
     # install config files, including service files
     sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
     sudo systemctl daemon-reload  # immediately use the service files
+
+    # (post-config) other setup
+    sudo update-grub  # grub needs to be further applied
 }
 
 
