@@ -29,12 +29,21 @@ else
     send_args=""
 fi
 
+del_dest_snapshot() {
+    local n="$1"
+    if [ -d "$dest/$n/snapshot" ]; then
+        sudo btrfs subvolume delete "$dest/$n/snapshot"
+    fi
+    sudo rm -rf "$dest/$n"
+}
+
+trap "del_dest_snapshot $n_latest" EXIT
 sudo mkdir "$dest/$n_latest"
 sudo btrfs send $send_args "$src/$n_latest/snapshot" |    \
     sudo btrfs receive "$dest/$n_latest"
 sudo cp "$src/$n_latest/info.xml" "$dest/$n_latest/"
+trap - EXIT
 
 for n in $(ls -At "$dest" | head -n "-3"); do
-    sudo btrfs subvolume delete "$dest/$n/snapshot"
-    sudo rm -rf "$dest/$n"
+    del_dest_snapshot $n
 done
