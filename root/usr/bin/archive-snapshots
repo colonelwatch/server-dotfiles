@@ -1,0 +1,40 @@
+#!/bin/bash -e
+
+src="$1/.snapshots"
+dest="$2"
+
+if [ ! -d "$src" ]; then
+    echo "error: source does not exist or has no .snapshots subvolume"
+    exit 1
+fi
+
+n_latest=$(ls -At "$src" | head -n 1)
+if [ -z $n_latest ]; then
+    echo "error: no snapshot found in $src"
+    exit 1
+fi
+
+if [ ! -d "$dest" ]; then
+    sudo btrfs subvolume create "$dest"
+fi
+
+n_parent="$(ls -At "$dest" | head -n 1)"
+if [ ! -z "$n_parent" ]; then
+    if ! ls "$src" | grep -q "$n_parent"; then
+        echo "error: destination snapshot number was not found!"
+        exit 1
+    fi
+    send_args="-p \"$src/$n_parent/snapshot\""
+else
+    send_args=""
+fi
+
+sudo mkdir "$dest/$n_latest"
+sudo btrfs send $send_args "$src/$n_latest/snapshot" |    \
+    sudo btrfs receive "$dest/$n_latest"
+sudo cp "$src/$n_latest/info.xml" "$dest/$n_latest/"
+
+for n in $(ls -At "$dest" | head -n "-3"); do
+    sudo btrfs subvolume delete "$dest/$n/snapshot"
+    sudo rm -rf "$dest/$n"
+done
