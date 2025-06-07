@@ -87,7 +87,7 @@ function do_root {
     sudo apt install -y \
         bolt firmware-misc-nonfree nvidia-driver systemd-zram-generator
     sudo apt install -y \
-        cloudflared mosquitto nginx snapper
+        cloudflared hdparm mosquitto nginx snapper
     sudo apt install -y \
         acl bats bats-assert bats-support bats-file btrfs-progs build-essential     \
         ffmpeg htop parallel rclone rsync ruby-full screen vim
