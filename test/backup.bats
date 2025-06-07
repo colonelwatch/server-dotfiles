@@ -1,5 +1,14 @@
 load test_helper
 
+SCRIPTS=$(cat <<EOF
+backup-permissions
+backup-server
+restore-permissions
+upload-snapshots
+archive-snapshots
+EOF
+)
+
 
 @test "check snapper is installed" {
     check_package snapper
@@ -40,9 +49,9 @@ load test_helper
 
 
 @test "check backup scripts exist and are executable" {
-    for f in backup-permissions backup-server restore-permissions upload-snapshots; do
-        l="/usr/bin/$f"
-        t="$PWD/root/usr/bin/$f"
+    for s in $SCRIPTS; do
+        l="/usr/bin/$s"
+        t="$PWD/root/usr/bin/$s"
         assert_symlink_to "$t" "$l"
         assert_file_executable "$t"
     done
@@ -61,4 +70,9 @@ load test_helper
 
 @test "check upload-snapshots is enabled" {
     check_service upload-snapshots
+}
+
+
+@test "check archive-snapshots is enabled" {
+    check_service archive-snapshots
 }

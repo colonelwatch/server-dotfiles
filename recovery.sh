@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+source common.sh
+
+
 AUX_BACKUP_DIR="/media/auxiliary/backup"
 
 if [ ! -d "$AUX_BACKUP_DIR/server" -o ! -d "$AUX_BACKUP_DIR/laptop" ]; then
@@ -11,10 +14,13 @@ fi
 rsync -a "$AUX_BACKUP_DIR/server/" ~/
 ln -s -f "$AUX_BACKUP_DIR/laptop" ~/Laptop
 
-# reenable snapper
-sudo systemctl enable snapper-cleanup.timer
-sudo systemctl enable snapper-timeline.timer
-sudo systemctl enable snapper-boot.timer
+# reenable snapper and backup
+for s in $SNAPPER_SERVICES; do
+    sudo systemctl enable "$s"
+done
+for s in $BACKUP_SERVICES; do
+    sudo systemctl enable "$s"
+done
 
 # install conda envs
 source ~/miniconda3/bin/activate && conda deactivate

@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+source common.sh
+
+
 function do_setup {
     # install curl, get add cloudflare gpg key
     sudo apt install -y curl
@@ -44,12 +47,18 @@ function do_networking {
 
 
 function suspend_snapper {
-    sudo systemctl disable snapper-cleanup.timer
-    sudo systemctl disable snapper-timeline.timer
-    sudo systemctl disable snapper-boot.timer
-    sudo systemctl stop snapper-cleanup.timer
-    sudo systemctl stop snapper-timeline.timer
-    sudo systemctl stop snapper-boot.timer
+    for s in $ARCHIVE_SERVICES; do
+        sudo systemctl disable "$s"
+        sudo systemctl stop "$s"
+    done
+}
+
+
+function suspend_backup {
+    for s in $BACKUP_SERVICES; do
+        sudo systemctl disable "$s"
+        sudo systemctl stop "$s"
+    done
 }
 
 
