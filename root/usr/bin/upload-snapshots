@@ -3,7 +3,8 @@
 BACKUP_DIR="/media/auxiliary/backup"
 RCLONE_FLAGS="--links --fast-list --checkers=8 --transfers=4"
 
-function sync_aux_to_cloud {
+sync_aux_to_cloud() {
+	local snapshot_number snapshot_dir
 	if [ ! -d "$BACKUP_DIR/.snapshots" ]; then
 		echo "error: .snapshots of backup subvolume does not exist"
 		exit 1
@@ -15,12 +16,14 @@ function sync_aux_to_cloud {
 	fi
 	snapshot_dir="$BACKUP_DIR/.snapshots/$snapshot_number/snapshot"
 
+	local rclone_relpath
 	if [ "$2" = "." ]; then
 		rclone_relpath=""
 	else
 		rclone_relpath="$2"
 	fi
 
+	local source_path target_path
 	if [ "$1" = "laptop" ]; then
 		source_path="$snapshot_dir/laptop/$2"
 		target_path="laptop_bak:$rclone_relpath"

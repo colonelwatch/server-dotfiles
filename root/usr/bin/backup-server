@@ -4,9 +4,9 @@ BACKUP_DIR="/media/auxiliary/backup"
 SERVER_BACKUP_DIR="$BACKUP_DIR/server"
 RSYNC_FLAGS="-a --delete"
 
-function sync_to_aux {
-	source_path="/home/kenny/$1"
-	target_path="$SERVER_BACKUP_DIR/$1"
+sync_to_aux() {
+	local source_path="/home/kenny/$1"
+	local target_path="$SERVER_BACKUP_DIR/$1"
 	shift 1
 
 	echo "syncing \"$source_path\" to \"$target_path\"..."
