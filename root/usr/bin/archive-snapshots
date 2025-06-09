@@ -25,7 +25,7 @@ if [ ! -z "$n_parent" ]; then
         echo "error: destination snapshot number was not found!"
         exit 1
     fi
-    send_args="-p \"$src/$n_parent/snapshot\""
+    send_args="-p $src/$n_parent/snapshot"
 else
     send_args=""
 fi
