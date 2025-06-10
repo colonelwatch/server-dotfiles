@@ -11,6 +11,11 @@ if [ ! -d "$AUX_BACKUP_DIR/server" -o ! -d "$AUX_BACKUP_DIR/laptop" ]; then
     exit 1
 fi
 
+# reenable rclone
+rclone config reconnect server_bak: --auto-confirm
+rclone config reconnect laptop_bak: --auto-confirm
+
+# load from auxiliary drive
 rsync -a "$AUX_BACKUP_DIR/server/" ~/
 ln -s -f "$AUX_BACKUP_DIR/laptop" ~/Laptop
 

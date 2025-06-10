@@ -42,7 +42,7 @@ function do_networking {
 
     # connect it to the previously recorded wifi network
     sleep 10 # wait for wifi to be ready
-    sudo nmcli device wifi connect "$ssid" password "$psk"
+    nmcli device wifi connect "$ssid" password "$psk"
 }
 
 
