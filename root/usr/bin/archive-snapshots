@@ -45,6 +45,6 @@ sudo btrfs send $send_args "$src/$n_latest/snapshot" |    \
 sudo cp "$src/$n_latest/info.xml" "$dest/$n_latest/"
 trap - EXIT
 
-for n in $(ls -At "$dest" | head -n "-3"); do
+for n in $(ls -At "$dest" | tail -n +4); do
     del_dest_snapshot $n
 done
