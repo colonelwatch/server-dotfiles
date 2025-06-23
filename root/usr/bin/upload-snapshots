@@ -16,29 +16,21 @@ sync_aux_to_cloud() {
 	fi
 	snapshot_dir="$BACKUP_DIR/.snapshots/$snapshot_number/snapshot"
 
-	local rclone_relpath
-	if [ "$2" = "." ]; then
-		rclone_relpath=""
-	else
-		rclone_relpath="$2"
-	fi
-
 	local source_path target_path
 	if [ "$1" = "laptop" ]; then
-		source_path="$snapshot_dir/laptop/$2"
-		target_path="laptop_bak:$rclone_relpath"
+		source_path="$snapshot_dir/laptop"
+		target_path="laptop_bak:"
 	elif [ "$1" = "server" ]; then
-		source_path="$snapshot_dir/server/$2"
-		target_path="server_bak:$rclone_relpath"
+		source_path="$snapshot_dir/server"
+		target_path="server_bak:"
 	else
 		echo "error: context $1 does not exist"
 		exit 1
 	fi
-	shift 2
 
 	echo "syncing \"$source_path\" to \"$target_path\"..."
-	rclone sync "$source_path" "$target_path" $RCLONE_FLAGS $*
-	rclone dedupe --dedupe-mode newest "$target_path" $RCLONE_FLAGS $*
+	rclone sync "$source_path" "$target_path" $RCLONE_FLAGS
+	rclone dedupe --dedupe-mode newest "$target_path" $RCLONE_FLAGS
 }
 
 if [ ! -d "$BACKUP_DIR" ]; then
@@ -46,8 +38,5 @@ if [ ! -d "$BACKUP_DIR" ]; then
 	exit 1
 fi
 
-sync_aux_to_cloud server .node-red --exclude "{lib,node_modules}/**"
-sync_aux_to_cloud server .ssh
-sync_aux_to_cloud server .cloudflared
-sync_aux_to_cloud server Services
-sync_aux_to_cloud laptop .
+sync_aux_to_cloud server
+sync_aux_to_cloud laptop
