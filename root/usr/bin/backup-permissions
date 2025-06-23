@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-cd "/media/auxiliary/backup/$1"
+dir_path="$1"
+
+cd "$dir_path"
 
 # ensure the perms of perms.gz (or perms) itself isn't caught
 if [ -f perms.gz ]; then

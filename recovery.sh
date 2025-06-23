@@ -2,22 +2,51 @@
 
 source common.sh
 
-
+# TODO: define how to recover either from the cloud or the cold storage drive
 AUX_BACKUP_DIR="/media/auxiliary/backup"
+COLD_DATA_DIR="/media/cold/data"
 
-if [ ! -d "$AUX_BACKUP_DIR/server" -o ! -d "$AUX_BACKUP_DIR/laptop" ]; then
-    # TODO: define how to recover either from the cloud or the cold storage drive
-    echo "error: backup on auxilary drive is unavailable"
-    exit 1
-fi
+function load_backup_from_auxiliary {
+    if [ ! -d "$AUX_BACKUP_DIR" ]; then
+        echo "error: backup on auxilary drive is unavailable"
+        return 1
+    fi
+    rsync -a "$AUX_BACKUP_DIR/server/" ~/
+    ln -s -f "$AUX_BACKUP_DIR/laptop" ~/Laptop
+}
 
-# reenable rclone
-rclone config reconnect server_bak: --auto-confirm
-rclone config reconnect laptop_bak: --auto-confirm
+function load_data_from_cold {
+    if [ -d ~/Data ]; then
+        return 0  # skip for now (TODO: implement the recovery for this case)
+    fi
 
-# load from auxiliary drive
-rsync -a "$AUX_BACKUP_DIR/server/" ~/
-ln -s -f "$AUX_BACKUP_DIR/laptop" ~/Laptop
+    if [ ! -d "$COLD_BACKUP_DIR" ]; then
+        echo "error: data on cold drive is unavailable"
+        return 1
+    fi
+
+    n_latest=$(ls -At "$COLD_BACKUP_DIR" | head -n 1)
+    if [ -z "$n_latest" ]; then
+        echo "error: no snapshot found for data on cold drive"
+        return 1
+    fi
+
+    btrfs subvolume create ~/Data
+    btrfs subvolume create ~/Data/.snapshots
+    sudo chown root:root ~/Data/.snapshots
+
+    rsync -a --exclude="/.snapshots" "$COLD_BACKUP_DIR/$n_latest/snapshot/" ~/Data
+}
+
+function reenable_rclone {
+    sudo rclone config reconnect backup: --auto-confirm
+    sudo rclone config reconnect data: --auto-confirm
+}
+
+
+load_backup_from_auxiliary
+load_data_from_cold
+reenable_rclone
 
 # reenable snapper and backup
 for s in $SNAPPER_SERVICES; do

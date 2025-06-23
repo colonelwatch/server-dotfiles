@@ -1,42 +1,28 @@
 #!/bin/bash -e
 
-BACKUP_DIR="/media/auxiliary/backup"
 RCLONE_FLAGS="--links --fast-list --checkers=8 --transfers=4"
 
-sync_aux_to_cloud() {
-	local snapshot_number snapshot_dir
-	if [ ! -d "$BACKUP_DIR/.snapshots" ]; then
-		echo "error: .snapshots of backup subvolume does not exist"
-		exit 1
-	fi
-	snapshot_number=$(ls -At "$BACKUP_DIR/.snapshots" | head -n 1)
-	if [ -z $snapshot_number ]; then
-		echo "error: no snapshot found in .snapshots"
-		exit 1
-	fi
-	snapshot_dir="$BACKUP_DIR/.snapshots/$snapshot_number/snapshot"
+local_path="$1"
+remote_path="$2"
 
-	local source_path target_path
-	if [ "$1" = "laptop" ]; then
-		source_path="$snapshot_dir/laptop"
-		target_path="laptop_bak:"
-	elif [ "$1" = "server" ]; then
-		source_path="$snapshot_dir/server"
-		target_path="server_bak:"
-	else
-		echo "error: context $1 does not exist"
-		exit 1
-	fi
-
-	echo "syncing \"$source_path\" to \"$target_path\"..."
-	rclone sync "$source_path" "$target_path" $RCLONE_FLAGS
-	rclone dedupe --dedupe-mode newest "$target_path" $RCLONE_FLAGS
-}
-
-if [ ! -d "$BACKUP_DIR" ]; then
-	echo "error: backup subvolume does not exist"
+if [ ! -d "$local_path" ]; then
+	echo "error: local subvolume does not exist"
+	exit 1
+elif [ ! -d "$local_path/.snapshots" ]; then
+	echo "error: .snapshots of local subvolume does not exist"
 	exit 1
 fi
 
-sync_aux_to_cloud server
-sync_aux_to_cloud laptop
+snapshots_path="$local_path/.snapshots"
+
+snapshot_number=$(ls -At "$snapshots_path" | head -n 1)
+if [ -z "$snapshot_number" ]; then
+	echo "error: no snapshot found in .snapshots"
+	exit 1
+fi
+
+latest_snapshot_path="$snapshots_path/$snapshot_number/snapshot"
+
+echo "syncing \"$latest_snapshot_path\" to \"$remote_path\"..."
+rclone sync "$latest_snapshot_path" "$remote_path" $RCLONE_FLAGS
+rclone dedupe --dedupe-mode newest "$remote_path" $RCLONE_FLAGS

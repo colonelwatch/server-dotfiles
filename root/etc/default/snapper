@@ -3,7 +3,7 @@
 ## Type:        string
 ## Default:     ""
 # List of snapper configurations.
-SNAPPER_CONFIGS="backup"
+SNAPPER_CONFIGS="backup data"
 
 # if you want to disable snapshot per install/upgrade, then set "yes"
 DISABLE_APT_SNAPSHOT="no"

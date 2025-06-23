@@ -89,8 +89,9 @@ function do_root {
     sudo apt install -y \
         cloudflared hdparm mosquitto nginx snapper
     sudo apt install -y \
-        acl bats bats-assert bats-support bats-file btrfs-progs build-essential     \
-        ffmpeg htop parallel rclone rsync ruby-full screen vim
+        acl bats bats-assert bats-support bats-file bc btrfs-progs          \
+        build-essential ffmpeg htop parallel rclone rsync ruby-full screen  \
+        vim
     sudo ln -s -f $PWD/root/usr/bin/* /usr/bin/
 
     # (pre-config) other setup
@@ -133,33 +134,10 @@ function get_jekyll {
 }
 
 
-function patch_rclone {
-    if [ -d ~/.config/rclone ]; then
-        return 0  # skip, since this step was already done
-    fi
-
-    unlink ~/.config/rclone # undo symlink b/c it eventually contains keys...
-    mkdir ~/.config/rclone  #  ...so we'll only copy the config files
-    cp ~/.dotfiles/config/rclone/rclone.conf ~/.config/rclone/
-    # rclone is not authorized yet, so authorize manually in recovery.sh
-}
-
-
 function do_user {
     get_nodered
     get_miniconda
     get_jekyll
-
-    # install config files
-    mkdir -p ~/.config
-    if [ -d ~/.config/rclone ]; then
-        # ln fails if the rclone config is already patched, so delete it
-        rm -rf ~/.config/rclone
-    fi
-    ln -s -f $PWD/config/* ~/.config/
-
-    # other config
-    patch_rclone
     crontab crontab.bak
 }
 

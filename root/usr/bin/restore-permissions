@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-cd "/media/auxiliary/backup/$1"
+dir_path="$1"
+
+cd "$dir_path"
 
 if [ ! -f "perms.gz"]; then
     echo "error: perms.gz not found"

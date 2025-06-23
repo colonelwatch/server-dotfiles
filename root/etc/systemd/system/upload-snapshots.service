@@ -8,7 +8,8 @@ After=snapper-timeline.service
 [Service]
 Type=oneshot
 ExecCondition=bash -c "test $(date +%%u) = 1 -a $(date +%%H) = 00"
-ExecStart=/usr/bin/upload-snapshots
+ExecStart=/usr/bin/upload-snapshots /media/auxiliary/backup backup:
+ExecStart=/usr/bin/upload-snapshots /home/kenny/Data data:
 
 [Install]
 WantedBy=snapper-timeline.service

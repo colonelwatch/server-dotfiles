@@ -2,9 +2,17 @@
 
 src="${1%/}/.snapshots"
 dest="${2%/}"
+history_len="$3"
 
 if [ ! -d "$src" ]; then
     echo "error: source does not exist or has no .snapshots subvolume"
+    exit 1
+fi
+
+if [ -z "$history_len" ]; then
+    history_len=3
+elif [ "$history_len" -le 0 ]; then
+    echo "error: history length must be a number greater than zero"
     exit 1
 fi
 
@@ -48,6 +56,6 @@ sudo btrfs send $send_args "$src/$n_latest/snapshot" |    \
 sudo cp "$src/$n_latest/info.xml" "$dest/$n_latest/"
 trap - EXIT
 
-for n in $(ls -At "$dest" | tail -n +4); do
+for n in $(ls -At "$dest" | tail -n +$(bc <<< "$history_len+1")); do
     del_dest_snapshot $n
 done
