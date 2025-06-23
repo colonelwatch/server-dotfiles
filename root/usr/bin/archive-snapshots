@@ -9,7 +9,7 @@ if [ ! -d "$src" ]; then
 fi
 
 n_latest=$(ls -At "$src" | head -n 1)
-if [ -z $n_latest ]; then
+if [ -z "$n_latest" ]; then
     echo "error: no snapshot found in $src"
     exit 1
 fi
@@ -23,8 +23,8 @@ if [ "$n_parent" = "$n_latest" ]; then
     echo "source and destination already match"
     exit 0
 elif [ ! -z "$n_parent" ]; then
-    # TODO: send a notification if this happens--it's a critical issue
     if ! ls "$src" | grep -q "$n_parent"; then
+        # TODO: send a notification if this happens--it's a critical issue
         echo "error: destination snapshot number was not found!"
         exit 1
     fi
