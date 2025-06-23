@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-RCLONE_FLAGS="--links --fast-list --checkers=8 --transfers=4"
+RCLONE_FLAGS="--links --track-renames --fast-list --checkers=8 --transfers=4"
 
 local_path="$1"
 remote_path="$2"
