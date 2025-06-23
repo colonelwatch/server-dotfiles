@@ -100,6 +100,7 @@ function do_root {
 
     # install config files, including service files
     sudo cp -rvf --no-preserve=mode,ownership root/etc/* /etc/
+    sudo cp -rvf --no-preserve=mode,ownership root/root/.config /root/
     sudo systemctl daemon-reload  # immediately use the service files
 
     # (post-config) other setup
