@@ -12,5 +12,5 @@ if [ -f perms ]; then
     rm perms
 fi
 
-getfacl -R ./* ./.* > perms
+getfacl -R ./* > perms
 gzip perms
