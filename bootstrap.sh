@@ -140,6 +140,7 @@ function do_user {
     get_miniconda
     get_jekyll
     crontab crontab.bak
+    ln -s -f $PWD/home/.* ~/
 }
 
 
