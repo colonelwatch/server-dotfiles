@@ -90,8 +90,8 @@ function do_root {
         cloudflared hdparm mosquitto nginx snapper
     sudo apt install -y \
         acl bats bats-assert bats-support bats-file bc btrfs-progs          \
-        build-essential ffmpeg htop parallel rclone rsync ruby-full screen  \
-        vim
+        build-essential ffmpeg htop parallel python3-venv rclone rsync      \
+        ruby-full screen vim
     sudo ln -s -f $PWD/root/usr/bin/* /usr/bin/
 
     # (pre-config) other setup
@@ -115,21 +115,6 @@ function get_nodered {
 }
 
 
-function get_miniconda {
-    if [ -d ~/miniconda3 ]; then
-        source ~/miniconda3/bin/activate && conda deactivate
-        conda update -y -n base -c defaults conda
-        return 0
-    fi 
-
-    # download and execute miniconda install script
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh  \
-        -O ~/miniconda3_install.sh
-    bash ~/miniconda3_install.sh -b
-    rm ~/miniconda3_install.sh
-}
-
-
 function get_jekyll {
     GEM_HOME="$HOME/gems" PATH="$HOME/gems/bin:$PATH" gem install jekyll bundler
 }
@@ -137,7 +122,6 @@ function get_jekyll {
 
 function do_user {
     get_nodered
-    get_miniconda
     get_jekyll
     crontab crontab.bak
     ln -s -f $PWD/home/.* ~/

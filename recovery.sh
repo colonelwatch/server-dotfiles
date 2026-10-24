@@ -56,11 +56,6 @@ for s in $BACKUP_SERVICES; do
     sudo systemctl enable "$s"
 done
 
-# install conda envs
-source ~/miniconda3/bin/activate && conda deactivate
-conda env create -f ~/Services/sec-edgar/environment.yml
-conda env create -f ~/Services/revrss-newswires/environment.yml
-
 # nodered state was in the backup, but add smartnora manually
 cd ~/.node-red
 npm install node-red-contrib-smartnora
