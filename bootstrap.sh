@@ -110,7 +110,7 @@ function do_root {
 
 function get_nodered {
     wget https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
-    bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node18
+    bash ./update-nodejs-and-nodered --confirm-install --skip-pi --no-init --node22
     rm ./update-nodejs-and-nodered
 }
 
